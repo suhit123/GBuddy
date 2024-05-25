@@ -14,9 +14,11 @@ app.use(cors(
 ));
 
 const notes = require("./routes/notes");
+const products = require("./routes/products");
 app.use(express.json());
 app.use(cors());
 app.use('/notes',notes.route);
+app.use('/products',products.route);
 app.listen(port,()=>{
     console.log(`listening to port number ${port}`);
 })

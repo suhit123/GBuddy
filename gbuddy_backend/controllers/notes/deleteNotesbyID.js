@@ -1,5 +1,4 @@
 const notesSchema = require('../../models/notesSchema');
-
 const deleteNotesbyID = async(req , res) =>{
     const id = req.params.id;
     try{
@@ -10,6 +9,4 @@ const deleteNotesbyID = async(req , res) =>{
         res.status(400).send(error);
     }
 }
-
-
 exports.deleteNotesbyID = deleteNotesbyID;
