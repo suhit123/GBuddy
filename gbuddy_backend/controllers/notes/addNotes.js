@@ -1,10 +1,7 @@
 const { google } = require('googleapis');
 const fs = require('fs');
 const notesSchema = require('../../models/notesSchema');
-
-
-const credentials = require('../notes/credentials.json');
-const { format } = require('path');
+const credentials = require('../../credentials.json');
 const scopes = ['https://www.googleapis.com/auth/drive'];
 const auth = new google.auth.JWT(
   credentials.client_email,
@@ -12,9 +9,7 @@ const auth = new google.auth.JWT(
   credentials.private_key,
   scopes
 );
-
 const drive = google.drive({ version: 'v3', auth });
-
 const addNotes =
   async (req, res) => {
     try {
