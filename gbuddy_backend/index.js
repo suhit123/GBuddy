@@ -1,25 +1,24 @@
-
-const user=require("./routes/users");
-const connect = require("./db");
-const express = require('express');
-const swaggerUI = require("swagger-ui-express");
-const swaggerSpec = require("./swagger");
-const app = express();
-const port = 4001;
-connect.connectwithdb();
-const cors = require('cors');
+const express= require('express');
+const app=express();
+const cors=require('cors');
+const port =process.env.PORT || 8080;
+require('dotenv').config();
+const connectwithdb =require('./db');
+const connection=connectwithdb.connectwithdb;
+connection();
 app.use(cors(
     {
         origin: '*'
     }
 
 ));
-
-app.use("/swagger", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+const user=require("./routes/users");
+const notes = require("./routes/notes");
+const products = require("./routes/products");
 app.use(express.json());
 app.use('/user',user.route);
-
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+app.use('/notes',notes.route);
+app.use('/products',products.route);
+app.listen(port,()=>{
+    console.log(`listening to port number ${port}`);
+})
