@@ -12,11 +12,11 @@ app.use(cors(
     }
 
 ));
-
+const user=require("./routes/users");
 const notes = require("./routes/notes");
 const products = require("./routes/products");
 app.use(express.json());
-app.use(cors());
+app.use('/user',user.route);
 app.use('/notes',notes.route);
 app.use('/products',products.route);
 app.listen(port,()=>{
