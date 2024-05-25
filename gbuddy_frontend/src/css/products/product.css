@@ -1,0 +1,108 @@
+.productDetailedEntireContainer{
+    margin-top: 50px;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.productDetailedContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    justify-content: space-between;
+}
+.productDetailedContainerLeft{
+    width: 50%;
+}
+.productDetailedContainerLeftMainImage{
+    width: 400px;
+    height: auto;
+}
+.productDetailedContainerLeftImages{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+.productDetailedContainerLeftImageDiv{
+    width: 80px;
+    height:80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid grey;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.productDetailedContainerLeftImage{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.productDetailedContainerRight{
+    width: 45%;
+}
+
+.productDetailedEntireContainer p,h1,h2,h3,h4,h5,h6{
+    font-family: Arial, sans-serif;
+    padding: 0px;
+    margin-top: 5px;
+}
+.productDetailedEntireContainer p{
+    font-size: 15px;
+}
+.productDetailedContainerRightOptions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.productDetailedContainerRightOptions button{
+    width: 48%;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+.productDetailedContainerRightOptions button:first-child{
+    background-color: black;
+    color: white;
+}
+.productDetailedContainerRightOptions button:last-child{
+    background-color: white;
+    color: black;
+    border: 0.5px solid black;
+}
+.productDetailedContainerRightButtonChat{
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    border: 0.5px solid black;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+.productDetailedContainerRightButtonChat:hover{
+    background-color: black;
+    color: white;
+}
+.productDetailedDisclaimer{
+    margin-top: 20px;
+    font-size: 15px;
+}
+.searchProducts{
+    width: 92%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-left:10px;
+    border-radius: 4px;
+    border: 1px solid lightgrey;
+}
