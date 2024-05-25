@@ -1,17 +1,22 @@
-const addProduct=require('../controllers/products/addProduct')
-const getProductById=require('../controllers/products/getProductById');
-const editProduct=require('../controllers/products/editProduct');
-const deleteProduct=require('../controllers/products/deleteProduct');
-const fetchProducts=require('../controllers/products/fetchProducts');
+
 const express = require("express");
 const multer = require('multer');
-const searchProducts  = require('../controllers/products/searchProducts');
+const { addToCart } = require('../controllers/products/addToCart');
+const { addProduct } = require("../controllers/products/addProduct");
+const { getProductbyID } = require("../controllers/products/getProductById");
+const { fetchProducts } = require("../controllers/products/fetchProducts");
+const { deleteProductbyID } = require("../controllers/products/deleteProduct");
+const { editProductbyID } = require("../controllers/products/editProduct");
+const { searchProducts } = require("../controllers/products/searchProducts");
+const { fetchCartItems } = require("../controllers/products/fetchCartProducts");
 const upload = multer({ dest: 'uploads/' });
 const routes = express.Router();
-routes.post('/addProduct',addProduct.addProduct)
-.get('/get',getProductById.getProductbyID)
-.get('/fetchProducts',fetchProducts.fetchProducts)
-.get('/search',searchProducts.searchProducts)
-.delete("/delete/:id", deleteProduct.deleteProductbyID)
-.patch("/edit", editProduct.editProductbyID);
+routes.post('/addProduct',addProduct)
+.get('/get',getProductbyID)
+.get('/fetchProducts',fetchProducts)
+.get('/search',searchProducts)
+.delete("/delete/:id", deleteProductbyID)
+.patch("/edit", editProductbyID)
+.post("/addToCart",addToCart)
+.post("/fetchCart",fetchCartItems)
 exports.route = routes;

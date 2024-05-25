@@ -4,7 +4,6 @@ const usersSchema = mongoose.Schema({
     username : {type :String , required : true},
     email : {type :String , required : true},
     password : {type :String , required : true},
-
     displayname : {type :String , required : false},
     description : {type:String},
     year: {type :Number , required : false},
@@ -19,7 +18,8 @@ const usersSchema = mongoose.Schema({
     leetcode : {type : String , required : false} , 
     semester : {type : Number , required : false} ,
     phone : {type : String , required : false},
-    SavedFiles : {type : Array , required : false}
+    savedFiles : {type : Array , required : false},
+    cart:[{type:String}]
 });
 
 module.exports = mongoose.model('users',usersSchema);

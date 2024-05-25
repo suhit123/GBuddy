@@ -1,9 +1,9 @@
 const productsSchema = require('../../models/productSchema');
 exports.getProductbyID = async(req , res) =>{
-    const id = req.params.id;
+    const id = req.query.id;
     try{
-        const product=await productsSchema.find(id);
-        console.log(product)
+        console.log(id);
+        const product=await productsSchema.findById(id);
         res.status(200).send(product);
     }
     catch(error){
