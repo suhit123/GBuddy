@@ -1,14 +1,11 @@
-
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import { BrowserRouter ,Routes,Route} from 'react-router-dom';
-import Loginpage from './pages/login';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Loginpage />} />
+          <Route path="/" element={<LandingPage />} />
         </Routes>
       </BrowserRouter>
   );
