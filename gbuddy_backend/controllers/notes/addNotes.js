@@ -1,7 +1,7 @@
 const { google } = require('googleapis');
 const fs = require('fs');
 const notesSchema = require('../../models/notesSchema');
-const credentials = require('../../credentials.json');
+const credentials = require('../../details.json');
 const scopes = ['https://www.googleapis.com/auth/drive'];
 const auth = new google.auth.JWT(
   credentials.client_email,
