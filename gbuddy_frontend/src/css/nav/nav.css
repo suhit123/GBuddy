@@ -1,0 +1,213 @@
+.navContainer {
+    width: 100%;
+    overflow: hidden;
+    height: 40px;
+    border-bottom: 1px solid lightgrey;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navLeft {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.navLeft button {
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    padding-bottom: 5px;
+    transition: all 2s ease;
+}
+
+.navLeft button:hover {
+    border-bottom: 2px solid black;
+    padding-bottom: 3px;
+}
+
+.navMiddle {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.navMiddle h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 4px;
+
+}
+
+.navRight {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.navRight button:first-child {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 0px 5px;
+    cursor: pointer;
+}
+
+.navRight button {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 0px 5px;
+    cursor: pointer;
+}
+
+.navRight button:last-child {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 0px 5px;
+    cursor: pointer;
+}
+
+.sideCartOpen {
+    width: 300px;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    background-color: white;
+    box-shadow: 0px 0px 100px 0px #808080;
+    transition: all 0.3s ease;
+}
+
+.sideCart {
+    width: 300px;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    right: -300px;
+    top: 0px;
+    background-color: white;
+    box-shadow: 0px 0px 10px 0px grey;
+}
+
+.sideCart p {
+    font-family: Arial, sans-serif;
+    padding: 0px;
+    margin: 0px;
+    font-size: 15px;
+}
+
+.closeBtnCart {
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    cursor: pointer;
+}
+
+.cartProductShow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.cartProductShowLeft {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    margin-left: 20px;
+}
+
+.cartProductShowLeft img {
+    width: 70px;
+    height: auto;
+    object-fit: cover;
+}
+
+.cartProductShowRight {
+    margin-left: 10px;
+}
+
+.cartProductShowRight h3 {
+    font-family: Arial, sans-serif;
+    padding: 0px;
+    margin: 0px;
+    font-size: 14px;
+}
+
+.cartProductShowRight p {
+    font-family: Arial, sans-serif;
+    padding: 0px;
+    margin: 5px 0px;
+    font-size: 13px;
+}
+
+.removeViewButtons {
+    display: flex;
+    margin-top: 5px;
+}
+
+.removeViewButtons button:first-child {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.removeViewButtons button:last-child {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.cartItemsContainer {
+    width: 100%;
+    height: calc(100vh );
+    overflow-y: scroll;
+}
+
+.cartItemsContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.cartItemsContainer {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.cartItemsContainer h1{
+    font-family: Arial, sans-serif;
+    padding: 0px;
+    margin: 0px;
+    font-weight: 500;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
