@@ -1,0 +1,36 @@
+.profile-section, .assignments-section, .leaderboard-section, .saved-items-section {
+    margin-bottom: 20px;
+}
+
+.green-text {
+    color: #4caf50;
+}
+
+.wallet-button {
+    min-width: 120px;
+    margin: 5px;
+}
+
+.wallet-amount {
+    margin-top: 20px;
+}
+
+.assignment-elements, .leaderboard-elements, .saved-items-elements {
+    max-height: 300px;
+}
+
+.assignment-elements > div:nth-child(odd), 
+.leaderboard-elements > div:nth-child(odd), 
+.saved-items-elements > div:nth-child(odd) {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.assignment-elements > div:hover, 
+.leaderboard-elements > div:hover, 
+.saved-items-elements > div:hover {
+    background-color: #e0f7fa;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
