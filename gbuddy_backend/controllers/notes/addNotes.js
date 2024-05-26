@@ -40,6 +40,7 @@ const addNotes =
 
       try {
         const notes = await notesSchema.create({
+          title: req.body.title,
           sem: req.body.sem,
           userId: req.body.userId,
           year: req.body.year,

@@ -1,8 +1,10 @@
 .productDetailedEntireContainer{
-    margin-top: 50px;
+    margin-top: 0px;
+    padding-top: 100px;
     width: 800px;
     margin-left: auto;
     margin-right: auto;
+
 }
 .productDetailedContainer{
     display: flex;
@@ -13,6 +15,14 @@
 }
 .productDetailedContainerLeft{
     width: 50%;
+}
+.productDetailedContainerLeftMainImageContainer{
+    width: 400px;
+    height: 400px;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 .productDetailedContainerLeftMainImage{
     width: 400px;

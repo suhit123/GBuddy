@@ -1,0 +1,27 @@
+.addProductContainer{
+    width: 800px;
+    height: 80vh;
+    padding-top: 20vh;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+    top: 100px;
+}
+.addProductContainerLeft{
+    width: 50%;
+    position: absolute;
+    left: 0px;
+    top: 20%;
+}
+.addProductContainerLeft img{
+    width: 100%;
+    height: auto;
+}
+.addProductContainerRight{
+    width: 40%;
+    position: absolute;
+    right: 0px;
+}

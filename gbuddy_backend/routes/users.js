@@ -9,7 +9,8 @@ const  sendOtp  = require("../controllers/users/sendOtp");
 const existingUser = require("../controllers/users/existingUser");
 const changePassword = require("../controllers/users/changePassword");
 const changePasswordDirect = require("../controllers/users/changePasswordDirect");
-const additionaldetails = require("../controllers/users/additionaldetails")
+const additionaldetails = require("../controllers/users/additionaldetails");
+const { addAmount } = require("../controllers/users/addAmount");
 
 router
   .get("/get", getUser.fetchUser)
@@ -21,6 +22,6 @@ router
   .post("/changePassword" , changePassword.changePassword)
   .post("/changePasswordDirect" , changePasswordDirect.changePasswordDirect)
   .post("/additionaldetails" , additionaldetails.AdditionalDetails)
-  .post("/login", loginUser.loginUser);
-
+  .post("/login", loginUser.loginUser)
+  .post('/addAmount',addAmount);
 exports.route = router;

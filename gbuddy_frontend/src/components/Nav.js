@@ -4,24 +4,25 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/cartContext";
 import Loader from "./Loader";
+
 const Nav = ({ counter = 0 }) => {
   const navigator = useNavigate();
   const { cart, fetchCart, cartLoading } = useContext(CartContext);
   const [user, setUser] = useState("fc");
   const [openCart, setOpenCart] = useState(false);
 
-
-  //loaders
-  const [removeLoader, setRemoveLoader] = useState(false);
+  // Loaders
+  const [removeLoader, setRemoveLoader] = useState({});
 
   useEffect(() => {
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90";
-    if (token) {
+    if (token && cart.length === 0) {
       fetchCart();
     }
   }, []);
+
   const removeHandler = async (id) => {
-    setRemoveLoader(true);
+    setRemoveLoader((prev) => ({ ...prev, [id]: true }));
     await axios
       .post("http://localhost:8080/products/removeFromCart", {
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90",
@@ -35,9 +36,10 @@ const Nav = ({ counter = 0 }) => {
         console.log(error);
       })
       .finally(() => {
-        setRemoveLoader(false);
+        setRemoveLoader((prev) => ({ ...prev, [id]: false }));
       });
   };
+
   return (
     <>
       <div className="navContainer">
@@ -73,38 +75,47 @@ const Nav = ({ counter = 0 }) => {
         </div>
         <div className="cartItemsContainer">
           <h1>Cart Items</h1>
-          {cartLoading ? <div className="productsPageLoader">
-            <img style={{ width: "300px", height: "auto" }} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
-          </div> : cart.map((item) => {
-            return (
-              <div className="cartProductShow">
-                <div className="cartProductShowLeft">
-                  <img src={item.images[0]} alt={item.title} />
-                </div>
-                <div className="cartProductShowRight">
-                  <h3>{item.title}</h3>
-                  <p>{item.description.slice(0, 50)}...</p>
-                  <p>Price : {item.price}</p>
-                  <div className="removeViewButtons">
-                    <button onClick={() => {
-                      removeHandler(item._id);
-                    }}>{removeLoader ? "Loading..." : "Remove"}</button>
-                    <button
-                      onClick={() => {
-                        navigator(`/product/${item._id}`);
-                        setOpenCart(!openCart);
-                      }}
-                    >
-                      View
-                    </button>
+          {cartLoading ? (
+            <div className="productsPageLoader">
+              <img style={{ width: "300px", height: "auto" }} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
+            </div>
+          ) : cart.length === 0 ? (
+            <div className="emptyGif">
+              <img style={{ width: "300px", height: "auto" }} src={require('../images/6xif3w7YCH.gif')} alt="img" />
+            </div>
+          ) : (
+            cart.map((item) => {
+              return (
+                <div key={item._id} className="cartProductShow">
+                  <div className="cartProductShowLeft">
+                    <img src={item.images[0]} alt={item.title} />
+                  </div>
+                  <div className="cartProductShowRight">
+                    <h3>{item.title}</h3>
+                    <p>{item.description.slice(0, 50)}...</p>
+                    <p>Price : {item.price}</p>
+                    <div className="removeViewButtons">
+                      <button onClick={() => removeHandler(item._id)}>
+                        {removeLoader[item._id] ? "Loading..." : "Remove"}
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigator(`/product/${item._id}`);
+                          setOpenCart(!openCart);
+                        }}
+                      >
+                        View
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </div>
     </>
   );
 };
+
 export default Nav;

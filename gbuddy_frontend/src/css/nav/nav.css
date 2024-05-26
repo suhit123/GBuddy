@@ -2,11 +2,14 @@
     width: 100%;
     overflow: hidden;
     height: 40px;
+    background-color:white;
     border-bottom: 1px solid lightgrey;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    z-index: 20;
 }
 
 .navLeft {
@@ -35,6 +38,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-left: -50px
 }
 
 .navMiddle h1 {
@@ -92,6 +96,7 @@
     background-color: white;
     box-shadow: 0px 0px 100px 0px #808080;
     transition: all 0.3s ease;
+    z-index: 40;
 }
 
 .sideCart {
@@ -210,4 +215,16 @@
     margin-left: 10px;
     margin-bottom: 20px;
     margin-top: 20px;
+}
+.emptyGif{
+    width: 100%;
+    overflow: hidden;
+    margin-top: 10vh;
+    height: 90vh;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
