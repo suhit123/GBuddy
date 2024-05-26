@@ -9,7 +9,6 @@ const AdditionalDetails = async (req, res) => {
             res.status(404).send("User not found");
             return;
         }
-
         data.year = req.body.year;
         data.campus = req.body.campus;
         data.branch = req.body.branch;

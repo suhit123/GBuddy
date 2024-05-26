@@ -3,12 +3,11 @@ const bycrypt = require('bcrypt');
 const addUser = async (req, res) => {
     try {
         req.body.password = await bycrypt.hash(req.body.password, 10);
-
         const user = await usersSchema.create({
             email: req.body.email,
             password: req.body.password,
             username : req.body.username,
-            
+            phone: req.body.phone,
             displayName: req.body.displayName,
             description: req.body.description,
             year: req.body.year,

@@ -4,6 +4,7 @@ const usersSchema = mongoose.Schema({
     username : {type :String , required : true},
     email : {type :String , required : true},
     password : {type :String , required : true},
+    role:{type:String ,default : "user"},
     displayname : {type :String , required : false},
     description : {type:String},
     year: {type :Number , required : false},
@@ -17,7 +18,8 @@ const usersSchema = mongoose.Schema({
     github : {type : String , required : false} , 
     leetcode : {type : String , required : false} , 
     semester : {type : Number , required : false} ,
-    phone : {type : String , required : false},
+    phone : {type : String , required : true},
+    wallet:{type:Number , required : false , default : 0},
     savedFiles : {type : Array , required : false},
     cart:[{type:String}]
 });

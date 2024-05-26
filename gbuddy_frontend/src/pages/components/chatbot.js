@@ -92,14 +92,11 @@ return (
     ) : (
         curr === 2 && (
             <div className="chatBotContainer" >
-                <div className="chatBot" style={{backgroundImage: `url(${chatbotbg})`, backgroundSize: 'cover', backgroundPosition: 'center',backdropFilter: 'blur(5px)'}}>
+                <div className="chatBot" style={{backgroundColor:'white'}}>
                     <header className="header1">
                         <div className="h2header">
-                            <span id="chatbotlogo">
-                                <img src={chatbotimg} alt="Chatbot" />
-                            </span>
                             <h2>G-Assist</h2>
-                            <span alt="Close" id="cross" onClick={() => setCurr(1)}>
+                            <span style={{fontSize:"20px"}} alt="Close" id="cross" onClick={() => setCurr(1)}>
                                 X
                             </span>
                         </div>
@@ -107,7 +104,7 @@ return (
                     <ul className="chatbox" ref={chatboxRef}>
                         {messages.map((message, index) => (
                             <li key={index} className={`chat-${message.type} chat`}>
-                                <p>{message.content}</p>
+                                <p style={{fontSize:14}}>{message.content}</p>
                             </li>
                         ))}
                     </ul>

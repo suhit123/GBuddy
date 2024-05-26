@@ -1,11 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../css/products/product.css";
 import axios from "axios";
 import Nav from "../../components/Nav";
 import { CartContext } from "../../context/cartContext";
 import Loader from "../../components/Loader";
 const Product = () => {
+  const navigator = useNavigate();
+  const {User, fetchUser, UserLoading}=useContext(CartContext);
   const { id } = useParams();
   const { cart, fetchCart } = useContext(CartContext);
   const [addToCartLoader, setAddToCartLoader] = useState(false);
@@ -16,52 +18,66 @@ const Product = () => {
     description: "",
     price: "",
     images: [],
+    sellerId: "",
+    buyerId: "",
   });
   const [image, setImage] = useState("");
-  useEffect(() => {
-    if (id) {
-      const fetcher = async () => {
-        setDataLoading(true);
-        await axios.get(
-          `http://localhost:8080/products/get?id=${id}`
-        )
-          .then((response) => {
-            const data = response.data;
-            setProduct(data);
-            if (data?.images) {
-              setImage(data?.images?.[0]);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-          .finally(() => {
-            setDataLoading(false);
-          });
-      }
-      fetcher();
-    };
-  }, [id]);
-  const addToCart = async (id) => {
-    const token=localStorage.getItem('token');
-    console.log(token);
-    if(token && token.length!==0){
-    setAddToCartLoader(true);
+  useEffect(()=>{
+    fetchUser();
+  },[])
+  const fetcher = async () => {
+    setDataLoading(true);
     await axios
-      .post("http://localhost:8080/products/addToCart", {
-        token,
-        productId: id,
-      })
+      .get(`http://localhost:8080/products/get?id=${id}`)
       .then((response) => {
-        fetchCart();
+        const data = response.data;
+        console.log(data)
+        setProduct({
+          _id: data._id,
+          title:data.title,
+          description: data.description,
+          price: data.price,
+          images: data.images,
+          sellerId: data.sellerId,
+          buyerId: data.buyerId && data.buyerId.length!==0?data.buyerId:"",
+        });
+        if (data?.images) {
+          setImage(data?.images?.[0]);
+        }
       })
       .catch((error) => {
         console.log(error);
       })
       .finally(() => {
-        setAddToCartLoader(false);
-      }
-      );
+        setDataLoading(false);
+      });
+  };
+  useEffect(() => {
+    if (id) {
+      fetcher();
+    }
+  }, [id]);
+  const addToCart = async (id) => {
+    const token = localStorage.getItem("token");
+    if(!User){
+      navigator("/signup");
+    }
+    if (token && token.length !== 0) {
+      setAddToCartLoader(true);
+      await axios
+        .post("http://localhost:8080/products/addToCart", {
+          token,
+          productId: id,
+        })
+        .then((response) => {
+          fetchCart();
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setAddToCartLoader(false);
+        });
     }
   };
 
@@ -81,12 +97,17 @@ const Product = () => {
     });
   };
   const makePayment = async () => {
+    if(!User){
+      navigator("/signup");
+    }
     const res = await initializeRazorpay();
     if (!res) {
       alert("Razorpay SDK Failed to load");
       return;
     }
-    let amount = product.price;
+    let commission = (parseFloat(product.price) / 100) * 2;
+    let intialAmount = product.price;
+    let amount = product.price + (parseFloat(product.price) / 100) * 2;
     // Make API call to the serverless API
     const response = await axios.post("http://localhost:8080/api/razorpay", {
       amount: amount,
@@ -106,6 +127,21 @@ const Product = () => {
         if (response.razorpay_payment_id) {
           //   addToOrders();
           //   reduceQty();
+          const handleBuyer=async()=>{
+            await axios.post("http://localhost:8080/products/updateBuyerId",{
+              id,
+              buyerId:User?._id
+            })
+            .then((res)=>[
+              console.log(res.data)
+            ])
+            .catch((err)=>{
+              console.log(err)
+            })
+          }
+          handleBuyer();
+          window.location.reload();
+          fetcher();
         } else {
           console.log("Payment failed");
         }
@@ -124,15 +160,19 @@ const Product = () => {
     <>
       <Nav />
       <div>
-        {dataLoading ? <Loader/> :
+        {dataLoading ? (
+          <Loader />
+        ) : (
           <div className="productDetailedEntireContainer">
             <div className="productDetailedContainer">
               <div className="productDetailedContainerLeft">
-                <img
-                  className="productDetailedContainerLeftMainImage"
-                  src={image}
-                  alt={product.name}
-                />
+                <div className="productDetailedContainerLeftMainImageContainer">
+                  <img
+                    className="productDetailedContainerLeftMainImage"
+                    src={image}
+                    alt={product.name}
+                  />
+                </div>
                 <div className="productDetailedContainerLeftImages">
                   {product.images.map((img) => (
                     <div className="productDetailedContainerLeftImageDiv">
@@ -149,22 +189,33 @@ const Product = () => {
               </div>
               <div className="productDetailedContainerRight">
                 <h2>{product.title}</h2>
-                <p style={{ color: "grey", margin: 0, padding: 0 }}>
-                  Seller : {"Suhit"}
+                <p style={{ color: "grey", margin: 0, padding: 0 ,cursor:'pointer'}} >
+                  Seller : {product.sellerId}
                 </p>
                 <p>{product.description}</p>
-                <p>Price : {product.price}/-</p>
-                <div className="productDetailedContainerRightOptions">
-                  <button className="productDetailedContainerRightButton" onClick={() => addToCart(product._id)}>
-                    {addToCartLoader ? "Loading..." : "ADD TO CART"}
-                  </button>
-                  <button
-                    className="productDetailedContainerRightButton"
-                    onClick={makePayment}
-                  >
-                    BUY NOW
-                  </button>
-                </div>
+                <p>Price : {product.price}/- | Platform Fee : 2%</p>
+                {product.sellerId !== "" && product.buyerId !== "" ? (
+                  <>
+                    <div>
+                      <h3 style={{color:'darkred'}}>Sold out</h3>
+                    </div>
+                  </>
+                ) : (
+                  <div className="productDetailedContainerRightOptions">
+                    <button
+                      className="productDetailedContainerRightButton"
+                      onClick={() => addToCart(product._id)}
+                    >
+                      {addToCartLoader ? "Loading..." : "ADD TO CART"}
+                    </button>
+                    <button
+                      className="productDetailedContainerRightButton"
+                      onClick={makePayment}
+                    >
+                      BUY NOW
+                    </button>
+                  </div>
+                )}
                 <button className="productDetailedContainerRightButton productDetailedContainerRightButtonChat">
                   CHAT NOW
                 </button>
@@ -174,13 +225,13 @@ const Product = () => {
               <p>
                 <span style={{ fontWeight: 600 }}>Terms and conditions : </span>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy text
-                ever since the 1500s, when an unknown printer took a galley of
-                type and scrambled it to make a type specimen book.
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book.
               </p>
             </div>
-          </div>}
-
+          </div>
+        )}
       </div>
     </>
   );

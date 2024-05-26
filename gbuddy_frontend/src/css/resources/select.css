@@ -1,0 +1,46 @@
+.selectionContainer{
+    display: flex;
+    align-items: center ;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+}
+.selectionContainer .leftImg{
+    width: 35vw;
+    height: auto;
+    position: absolute;
+    left: 20%;
+}
+.selection{
+    position:absolute;
+    right: 15%;
+}
+.selectDiv{
+    width: 400px;
+    box-shadow: 0px 0px 15px rgb(186, 186, 186);
+    min-height: 600px;
+    height: 80vh;
+    border-radius: 10px;
+    position: relative;
+}
+.rightRound{
+    width: 80px;
+    height: 50px;
+    position: absolute;
+    right: 0px;
+    border-radius: 10px;
+}
+.selectDiv button{
+    width: 95%;
+    position: absolute;
+    left: 2.5%;
+    bottom: 2%;
+    border-radius: 5px;
+    padding: 15px;
+    border: none;
+    color: white;
+    background-color: rgb(38, 38, 38);
+    font-weight: 500;
+    font-size: 16px;
+}

@@ -46,8 +46,11 @@ const Products = () => {
         <>
             <Nav />
             <div className="productsListContainer">
-                <div>
+                <div className="productsListContainerOptions">
                     <input className="searchProducts" type="text" placeholder="Search Products" onChange={searchHandler} />
+                    <button onClick={()=>{
+                        navigator('/addProduct')
+                    }}>SELL</button>
                 </div>
                 {loading?
                <Loader/>:<div className="productsList">
