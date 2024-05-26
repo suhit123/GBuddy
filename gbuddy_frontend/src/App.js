@@ -5,6 +5,8 @@ import Products from './pages/products/Products';
 import { CartProvider } from './context/cartContext';
 import SignInSide from './pages/Signup';
 import Chatbot from './pages/components/chatbot';
+import HomePage from './pages/homePage';
+import ProfilePage from './pages/profilePage';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/signup" element={<SignInSide/>} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
         <Chatbot/>
         

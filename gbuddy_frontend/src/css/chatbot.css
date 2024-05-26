@@ -120,9 +120,9 @@
   resize: none;
   outline: none;
   overflow-y: scroll;
-  background-color: #dcdcdc85;
+  background-color: #f1f1f1;
   font-size: 16px;
-  color: #fff;
+  color: black;
   font-weight: 600;
   margin-top: -10px;
   margin-left: -15px;
