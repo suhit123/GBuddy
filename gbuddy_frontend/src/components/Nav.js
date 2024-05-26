@@ -1,60 +1,49 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../css/nav/nav.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/cartContext";
+import Loader from "./Loader";
 const Nav = ({counter=0}) => {
+  const navigator = useNavigate();
+  const {cart,fetchCart,cartLoading}=useContext(CartContext);
   const [user, setUser] = useState("fc");
   const [openCart, setOpenCart] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const navigator = useNavigate();
+
+
+  //loaders
+  const [removeLoader, setRemoveLoader] = useState(false);
+
   useEffect(() => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90";
+    const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90";
     if (token) {
-      const fetcher = async () => {
-        try {
-          const response = await axios.post(
-            "http://localhost:8080/products/fetchCart",
-            {
-              token,
-            }
-          );
-          setCartItems([...response.data]);
-            console.log(response.data);
-        } catch (e) {
-          console.log(e);
-        }
-      };
-      fetcher();
+      fetchCart();
     }
   }, []);
-  useEffect(() => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90";
-    if (token) {
-      const fetcher = async () => {
-        try {
-          const response = await axios.post(
-            "http://localhost:8080/products/fetchCart",
-            {
-              token,
-            }
-          );
-          setCartItems([...response.data]);
-            console.log(response.data);
-        } catch (e) {
-          console.log(e);
-        }
-      };
-      fetcher();
-    }
-  }, [counter]);
+  const removeHandler = async (id) => {
+    setRemoveLoader(true);
+    await axios
+      .post("http://localhost:8080/products/removeFromCart", {
+        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90",
+        productId: id,
+      })
+      .then((response) => {
+        console.log(response.data);
+        fetchCart();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setRemoveLoader(false);
+      });
+    };
   return (
     <>
       <div className="navContainer">
         <div className="navLeft">
           <button className="navLeftButton">Resources</button>
-          <button className="navLeftButton">Products</button>
+          <button className="navLeftButton" onClick={()=>navigator('/products')}>Products</button>
           <button className="navLeftButton">Roadmaps</button>
         </div>
         <div className="navMiddle">
@@ -84,7 +73,9 @@ const Nav = ({counter=0}) => {
         </div>
         <div className="cartItemsContainer"> 
           <h1>Cart Items</h1>
-          {cartItems.map((item) => {
+          {cartLoading? <div className="productsPageLoader">
+                    <img style={{width:"300px",height:"auto"}} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
+        </div>:cart.map((item) => {
             return (
               <div className="cartProductShow">
                 <div className="cartProductShowLeft">
@@ -95,7 +86,9 @@ const Nav = ({counter=0}) => {
                   <p>{item.description.slice(0, 50)}...</p>
                   <p>Price : {item.price}</p>
                   <div className="removeViewButtons">
-                    <button>Remove</button>
+                    <button onClick={()=>{
+                      removeHandler(item._id);
+                    }}>{removeLoader?"Loading...":"Remove"}</button>
                     <button
                       onClick={() => {
                         navigator(`/product/${item._id}`);

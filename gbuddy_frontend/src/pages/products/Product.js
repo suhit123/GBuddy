@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../../css/products/product.css";
 import axios from "axios";
 import Nav from "../../components/Nav";
+import { CartContext } from "../../context/cartContext";
 const Product = () => {
   const { id } = useParams();
-  const [counter, setCounter] = useState(0);
+  const { cart, fetchCart } = useContext(CartContext);
+  const [addToCartLoader, setAddToCartLoader] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [product, setProduct] = useState({
     _id: "",
     title: "",
@@ -17,20 +20,29 @@ const Product = () => {
   useEffect(() => {
     if (id) {
       const fetcher = async () => {
-        const response = await axios.get(
+        setDataLoading(true);
+        await axios.get(
           `http://localhost:8080/products/get?id=${id}`
-        );
-        const data = response.data;
-        console.log(data);
-        setProduct(data);
-        if(data?.images){
-        setImage(data?.images?.[0]);
-        }
-      };
+        )
+          .then((response) => {
+            const data = response.data;
+            setProduct(data);
+            if (data?.images) {
+              setImage(data?.images?.[0]);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            setDataLoading(false);
+          });
+      }
       fetcher();
-    }
+    };
   }, [id]);
   const addToCart = async (id) => {
+    setAddToCartLoader(true);
     await axios
       .post("http://localhost:8080/products/addToCart", {
         token:
@@ -38,12 +50,15 @@ const Product = () => {
         productId: id,
       })
       .then((response) => {
-        console.log(response.data);
-        setCounter(counter + 1);
+        fetchCart();
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(() => {
+        setAddToCartLoader(false);
+      }
+      );
   };
 
   //payment
@@ -103,63 +118,67 @@ const Product = () => {
   };
   return (
     <>
-      <Nav  counter={counter}/>
+      <Nav />
       <div>
-        <div className="productDetailedEntireContainer">
-          <div className="productDetailedContainer">
-            <div className="productDetailedContainerLeft">
-              <img
-                className="productDetailedContainerLeftMainImage"
-                src={image}
-                alt={product.name}
-              />
-              <div className="productDetailedContainerLeftImages">
-                {product.images.map((img) => (
-                  <div className="productDetailedContainerLeftImageDiv">
-                    <img
-                      className="productDetailedContainerLeftImage"
-                      key={img}
-                      src={img}
-                      alt={product.name}
-                      onClick={() => setImage(img)}
-                    />
-                  </div>
-                ))}
+        {dataLoading ? <div className="productsPageLoader">
+          <img style={{ width: "400px", height: "auto" }} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
+        </div> :
+          <div className="productDetailedEntireContainer">
+            <div className="productDetailedContainer">
+              <div className="productDetailedContainerLeft">
+                <img
+                  className="productDetailedContainerLeftMainImage"
+                  src={image}
+                  alt={product.name}
+                />
+                <div className="productDetailedContainerLeftImages">
+                  {product.images.map((img) => (
+                    <div className="productDetailedContainerLeftImageDiv">
+                      <img
+                        className="productDetailedContainerLeftImage"
+                        key={img}
+                        src={img}
+                        alt={product.name}
+                        onClick={() => setImage(img)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="productDetailedContainerRight">
+                <h2>{product.title}</h2>
+                <p style={{ color: "grey", margin: 0, padding: 0 }}>
+                  Seller : {"Suhit"}
+                </p>
+                <p>{product.description}</p>
+                <p>Price : {product.price}/-</p>
+                <div className="productDetailedContainerRightOptions">
+                  <button className="productDetailedContainerRightButton" onClick={() => addToCart(product._id)}>
+                    {addToCartLoader ? "Loading..." : "ADD TO CART"}
+                  </button>
+                  <button
+                    className="productDetailedContainerRightButton"
+                    onClick={makePayment}
+                  >
+                    BUY NOW
+                  </button>
+                </div>
+                <button className="productDetailedContainerRightButton productDetailedContainerRightButtonChat">
+                  CHAT NOW
+                </button>
               </div>
             </div>
-            <div className="productDetailedContainerRight">
-              <h2>{product.title}</h2>
-              <p style={{ color: "grey", margin: 0, padding: 0 }}>
-                Seller : {"Suhit"}
+            <div className="productDetailedDisclaimer">
+              <p>
+                <span style={{ fontWeight: 600 }}>Terms and conditions : </span>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy text
+                ever since the 1500s, when an unknown printer took a galley of
+                type and scrambled it to make a type specimen book.
               </p>
-              <p>{product.description}</p>
-              <p>Price : {product.price}/-</p>
-              <div className="productDetailedContainerRightOptions">
-                <button className="productDetailedContainerRightButton" onClick={()=>addToCart(product._id)}>
-                  ADD TO CART
-                </button>
-                <button
-                  className="productDetailedContainerRightButton"
-                  onClick={makePayment}
-                >
-                  BUY NOW
-                </button>
-              </div>
-              <button className="productDetailedContainerRightButton productDetailedContainerRightButtonChat">
-                CHAT NOW
-              </button>
             </div>
-          </div>
-          <div className="productDetailedDisclaimer">
-            <p>
-              <span style={{ fontWeight: 600 }}>Terms and conditions : </span>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
-            </p>
-          </div>
-        </div>
+          </div>}
+
       </div>
     </>
   );

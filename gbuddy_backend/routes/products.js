@@ -9,6 +9,7 @@ const { deleteProductbyID } = require("../controllers/products/deleteProduct");
 const { editProductbyID } = require("../controllers/products/editProduct");
 const { searchProducts } = require("../controllers/products/searchProducts");
 const { fetchCartItems } = require("../controllers/products/fetchCartProducts");
+const { removeFromCart } = require("../controllers/products/removeFromCart");
 const upload = multer({ dest: 'uploads/' });
 const routes = express.Router();
 routes.post('/addProduct',addProduct)
@@ -18,5 +19,6 @@ routes.post('/addProduct',addProduct)
 .delete("/delete/:id", deleteProductbyID)
 .patch("/edit", editProductbyID)
 .post("/addToCart",addToCart)
+.post("/removeFromCart",removeFromCart)
 .post("/fetchCart",fetchCartItems)
 exports.route = routes;

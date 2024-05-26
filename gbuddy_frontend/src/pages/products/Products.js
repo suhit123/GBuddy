@@ -7,12 +7,22 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
     const navigator = useNavigate();
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetcher = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/products/fetchProducts");
-                console.log(response.data);
-                setProducts(response.data);
+                setLoading(true);
+                await axios.get("http://localhost:8080/products/fetchProducts")
+                    .then((response) => {
+
+                        setProducts(response.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
             } catch (e) {
                 console.log(e);
             };
@@ -38,12 +48,15 @@ const Products = () => {
                 <div>
                     <input className="searchProducts" type="text" placeholder="Search Products" onChange={searchHandler} />
                 </div>
-                <div className="productsList">
+                {loading?
+                <div className="productsPageLoader">
+                    <img style={{width:"400px",height:"auto"}} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
+                </div>:<div className="productsList">
                     {products.map((product) => {
                         return (
                             <div className="productsListItem" key={product._id}>
                                 <div className="productsListItemTop">
-                                    { product && product.images && product.images.length>0 ? <img src={product.images[0]} alt={product.title} /> : <></>}</div>
+                                    {product && product.images && product.images.length > 0 ? <img src={product.images[0]} alt={product.title} /> : <></>}</div>
                                 <div className="productsListItemBottom">
                                     <h2>{product.title}</h2>
                                     <p>{product.description.slice(0, 50)}...</p>
@@ -55,7 +68,7 @@ const Products = () => {
                             </div>
                         );
                     })}
-                </div>
+                </div>}
             </div>
             <div className="circle1"></div>
             <div className="circle2"></div>

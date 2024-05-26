@@ -5,6 +5,10 @@ exports.addToCart=async(req,res)=>{
         const {token,productId}=req.body;
         const decoded = jwt.verify(token, "secretkey");
         const user = await userSchema.findById(decoded.id);
+        if(user.cart.includes(productId)){
+            res.status(200).send("Product already in cart");
+            return;
+        }
         user.cart.push(productId);
         user.save();
         res.status(200).json(user);

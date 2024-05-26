@@ -88,6 +88,19 @@
     border: 1px solid grey;
     outline: none;
 }
+
+.productsPageLoader{
+    width: 100%;
+    overflow: hidden;
+    height: 100vh;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
 /* .circle1{
     position: fixed;
     width: 300px;
@@ -110,3 +123,4 @@
     top:70vh;
     opacity: 0.5;
 } */
+
