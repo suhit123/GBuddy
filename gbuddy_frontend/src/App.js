@@ -8,6 +8,7 @@ import ResourceOptions from './pages/Resources/resourcesOptions';
 import Library from './pages/Resources/Library';
 import AddProduct from './pages/products/AddProduct';
 import Chatbot from './pages/components/chatbot';
+import ResourceContribute from './pages/Resources/ResourceContribute';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/resourceOptions" element={<ResourceOptions/>} />
           <Route path="/library" element={<Library/>}/>
           <Route path="/addProduct" element={<AddProduct/>}/>
+          <Route path="/resourceContribute" element={<ResourceContribute/>}/>
         </Routes>
         <Chatbot/>
         

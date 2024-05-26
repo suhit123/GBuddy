@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../css/products/product.css";
 import axios from "axios";
 import Nav from "../../components/Nav";
 import { CartContext } from "../../context/cartContext";
 import Loader from "../../components/Loader";
 const Product = () => {
+  const navigator = useNavigate();
   const {User, fetchUser, UserLoading}=useContext(CartContext);
   const { id } = useParams();
   const { cart, fetchCart } = useContext(CartContext);
@@ -58,6 +59,9 @@ const Product = () => {
   }, [id]);
   const addToCart = async (id) => {
     const token = localStorage.getItem("token");
+    if(!User){
+      navigator("/signup");
+    }
     if (token && token.length !== 0) {
       setAddToCartLoader(true);
       await axios
@@ -93,6 +97,9 @@ const Product = () => {
     });
   };
   const makePayment = async () => {
+    if(!User){
+      navigator("/signup");
+    }
     const res = await initializeRazorpay();
     if (!res) {
       alert("Razorpay SDK Failed to load");

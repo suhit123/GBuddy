@@ -3,69 +3,67 @@ import "../css/nav/nav.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/cartContext";
-import Loader from "./Loader";
 
 const Nav = ({ counter = 0 }) => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
+  const { User, fetchUser } = useContext(CartContext);
   const { cart, fetchCart, cartLoading } = useContext(CartContext);
-  const [user, setUser] = useState("fc");
   const [openCart, setOpenCart] = useState(false);
-
-  // Loaders
   const [removeLoader, setRemoveLoader] = useState({});
 
   useEffect(() => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90";
-    if (token && cart.length === 0) {
-      fetchCart();
-    }
-  }, []);
+    const token = localStorage.getItem("token");
+    if (cart.length === 0) fetchCart();
+    fetchUser();
+  }, [fetchCart, fetchUser, cart.length, navigate]);
 
   const removeHandler = async (id) => {
     setRemoveLoader((prev) => ({ ...prev, [id]: true }));
-    await axios
-      .post("http://localhost:8080/products/removeFromCart", {
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90",
+    const token = localStorage.getItem("token");
+    if (!token) return navigate("/signup");
+
+    try {
+      const response = await axios.post("http://localhost:8080/products/removeFromCart", {
+        token,
         productId: id,
-      })
-      .then((response) => {
-        console.log(response.data);
-        fetchCart();
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setRemoveLoader((prev) => ({ ...prev, [id]: false }));
       });
+      console.log(response.data);
+      fetchCart();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRemoveLoader((prev) => ({ ...prev, [id]: false }));
+    }
+  };
+
+  const handleNavigate = (path) => {
+    navigate(path);
+    setOpenCart(false);
   };
 
   return (
     <>
       <div className="navContainer">
         <div className="navLeft">
-          <button className="navLeftButton">Resources</button>
-          <button className="navLeftButton" onClick={() => navigator('/products')}>Products</button>
-          <button className="navLeftButton">Roadmaps</button>
+          <button className="navLeftButton" onClick={()=>handleNavigate('/resourceOptions')}>Resources</button>
+          <button className="navLeftButton" onClick={() => handleNavigate('/products')}>Products</button>
         </div>
         <div className="navMiddle">
           <h1>GBUDDY</h1>
         </div>
-        {user === null ? (
+        {User === null ? (
           <div className="navRight">
-            <button className="navRightButton">Login</button>
-            <button className="navRightButton">Register</button>
+            <button className="navRightButton" onClick={() => navigate("/signup")}>Login</button>
+            <button className="navRightButton" onClick={() => navigate("/register")}>Register</button>
           </div>
         ) : (
           <div className="navRight">
-            <button className="navRightButton">Profile</button>
-            <button
-              className="navRightButton"
-              onClick={() => setOpenCart(!openCart)}
-            >
-              cart
-            </button>
-            <button className="navRightButton">Logout</button>
+            <button className="navRightButton" onClick={() => navigate("/profile")}>Profile</button>
+            <button className="navRightButton" onClick={() => setOpenCart(!openCart)}>Cart</button>
+            <button className="navRightButton" onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/signup");
+            }}>Logout</button>
           </div>
         )}
       </div>
@@ -84,33 +82,24 @@ const Nav = ({ counter = 0 }) => {
               <img style={{ width: "300px", height: "auto" }} src={require('../images/6xif3w7YCH.gif')} alt="img" />
             </div>
           ) : (
-            cart.map((item) => {
-              return (
-                <div key={item._id} className="cartProductShow">
-                  <div className="cartProductShowLeft">
-                    <img src={item.images[0]} alt={item.title} />
-                  </div>
-                  <div className="cartProductShowRight">
-                    <h3>{item.title}</h3>
-                    <p>{item.description.slice(0, 50)}...</p>
-                    <p>Price : {item.price}</p>
-                    <div className="removeViewButtons">
-                      <button onClick={() => removeHandler(item._id)}>
-                        {removeLoader[item._id] ? "Loading..." : "Remove"}
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigator(`/product/${item._id}`);
-                          setOpenCart(!openCart);
-                        }}
-                      >
-                        View
-                      </button>
-                    </div>
+            cart.map((item) => (
+              <div key={item._id} className="cartProductShow">
+                <div className="cartProductShowLeft">
+                  <img src={item.images[0]} alt={item.title} />
+                </div>
+                <div className="cartProductShowRight">
+                  <h3>{item.title}</h3>
+                  <p>{item.description.slice(0, 50)}...</p>
+                  <p>Price : {item.price}</p>
+                  <div className="removeViewButtons">
+                    <button onClick={() => removeHandler(item._id)}>
+                      {removeLoader[item._id] ? "Loading..." : "Remove"}
+                    </button>
+                    <button onClick={() => handleNavigate(`/product/${item._id}`)}>View</button>
                   </div>
                 </div>
-              );
-            })
+              </div>
+            ))
           )}
         </div>
       </div>

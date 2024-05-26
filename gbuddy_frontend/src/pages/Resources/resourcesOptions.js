@@ -203,6 +203,13 @@ const ResourceOptions = () => {
                 View
               </Button>
             </FormControl>
+            <FormControl fullWidth>
+              <Button style={{ backgroundColor: "white",color:'black',marginTop:"10px" }} variant="contained" onClick={()=>{
+                navigator('/resourceContribute')
+              }}>
+                Contribute
+              </Button>
+            </FormControl>
           </div>
         </div>
       </div>
