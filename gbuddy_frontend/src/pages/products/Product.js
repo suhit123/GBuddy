@@ -43,11 +43,13 @@ const Product = () => {
     };
   }, [id]);
   const addToCart = async (id) => {
+    const token=localStorage.getItem('token');
+    console.log(token);
+    if(token && token.length!==0){
     setAddToCartLoader(true);
     await axios
       .post("http://localhost:8080/products/addToCart", {
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90",
+        token,
         productId: id,
       })
       .then((response) => {
@@ -60,6 +62,7 @@ const Product = () => {
         setAddToCartLoader(false);
       }
       );
+    }
   };
 
   //payment
