@@ -11,6 +11,7 @@ const changePassword = require("../controllers/users/changePassword");
 const changePasswordDirect = require("../controllers/users/changePasswordDirect");
 const additionaldetails = require("../controllers/users/additionaldetails");
 const { addAmount } = require("../controllers/users/addAmount");
+const { getUserMobile } = require("../controllers/users/getUserMobile");
 
 router
   .get("/get", getUser.fetchUser)
@@ -23,5 +24,6 @@ router
   .post("/changePasswordDirect" , changePasswordDirect.changePasswordDirect)
   .post("/additionaldetails" , additionaldetails.AdditionalDetails)
   .post("/login", loginUser.loginUser)
-  .post('/addAmount',addAmount);
+  .post('/addAmount',addAmount)
+  .get('/getUserMobile',getUserMobile)
 exports.route = router;

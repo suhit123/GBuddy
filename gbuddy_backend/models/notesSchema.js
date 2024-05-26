@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const notesSchema = mongoose.Schema({
     title : {type :String , required : true},
     sem : {type :Number , required : true},
-    userId:{type:Number,requied:true},
+    userId:{type:String,requied:true},
     year : {type :Number , required : true},
     branch : {type :String , required : true},
     subject : {type :String , required : true},

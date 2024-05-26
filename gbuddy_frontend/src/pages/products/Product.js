@@ -7,11 +7,12 @@ import { CartContext } from "../../context/cartContext";
 import Loader from "../../components/Loader";
 const Product = () => {
   const navigator = useNavigate();
-  const {User, fetchUser, UserLoading}=useContext(CartContext);
+  const { User, fetchUser, UserLoading } = useContext(CartContext);
   const { id } = useParams();
   const { cart, fetchCart } = useContext(CartContext);
   const [addToCartLoader, setAddToCartLoader] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
+  const [mobile, setMobile] = useState("");
   const [product, setProduct] = useState({
     _id: "",
     title: "",
@@ -22,24 +23,25 @@ const Product = () => {
     buyerId: "",
   });
   const [image, setImage] = useState("");
-  useEffect(()=>{
+  useEffect(() => {
     fetchUser();
-  },[])
+  }, []);
   const fetcher = async () => {
     setDataLoading(true);
     await axios
       .get(`http://localhost:8080/products/get?id=${id}`)
       .then((response) => {
         const data = response.data;
-        console.log(data)
+        console.log(data);
         setProduct({
           _id: data._id,
-          title:data.title,
+          title: data.title,
           description: data.description,
           price: data.price,
           images: data.images,
           sellerId: data.sellerId,
-          buyerId: data.buyerId && data.buyerId.length!==0?data.buyerId:"",
+          buyerId:
+            data.buyerId && data.buyerId.length !== 0 ? data.buyerId : "",
         });
         if (data?.images) {
           setImage(data?.images?.[0]);
@@ -59,7 +61,7 @@ const Product = () => {
   }, [id]);
   const addToCart = async (id) => {
     const token = localStorage.getItem("token");
-    if(!User){
+    if (!User) {
       navigator("/signup");
     }
     if (token && token.length !== 0) {
@@ -80,7 +82,22 @@ const Product = () => {
         });
     }
   };
-
+  const findMobile = async () => {
+    await axios
+      .get(`http://localhost:8080/user/getUserMobile?id=${product.sellerId}`)
+      .then((res) => {
+        console.log(res.data);
+        setMobile(res.data.phone);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    if (product.sellerId !== "") {
+      findMobile();
+    }
+  }, []);
   //payment
   const initializeRazorpay = () => {
     return new Promise((resolve) => {
@@ -97,7 +114,7 @@ const Product = () => {
     });
   };
   const makePayment = async () => {
-    if(!User){
+    if (!User) {
       navigator("/signup");
     }
     const res = await initializeRazorpay();
@@ -127,18 +144,17 @@ const Product = () => {
         if (response.razorpay_payment_id) {
           //   addToOrders();
           //   reduceQty();
-          const handleBuyer=async()=>{
-            await axios.post("http://localhost:8080/products/updateBuyerId",{
-              id,
-              buyerId:User?._id
-            })
-            .then((res)=>[
-              console.log(res.data)
-            ])
-            .catch((err)=>{
-              console.log(err)
-            })
-          }
+          const handleBuyer = async () => {
+            await axios
+              .post("http://localhost:8080/products/updateBuyerId", {
+                id,
+                buyerId: User?._id,
+              })
+              .then((res) => [console.log(res.data)])
+              .catch((err) => {
+                console.log(err);
+              });
+          };
           handleBuyer();
           window.location.reload();
           fetcher();
@@ -189,7 +205,14 @@ const Product = () => {
               </div>
               <div className="productDetailedContainerRight">
                 <h2>{product.title}</h2>
-                <p style={{ color: "grey", margin: 0, padding: 0 ,cursor:'pointer'}} >
+                <p
+                  style={{
+                    color: "grey",
+                    margin: 0,
+                    padding: 0,
+                    cursor: "pointer",
+                  }}
+                >
                   Seller : {product.sellerId}
                 </p>
                 <p>{product.description}</p>
@@ -197,7 +220,7 @@ const Product = () => {
                 {product.sellerId !== "" && product.buyerId !== "" ? (
                   <>
                     <div>
-                      <h3 style={{color:'darkred'}}>Sold out</h3>
+                      <h3 style={{ color: "darkred" }}>Sold out</h3>
                     </div>
                   </>
                 ) : (
@@ -216,7 +239,17 @@ const Product = () => {
                     </button>
                   </div>
                 )}
-                <button className="productDetailedContainerRightButton productDetailedContainerRightButtonChat">
+                <button
+                  className="productDetailedContainerRightButton productDetailedContainerRightButtonChat"
+                  onClick={() => {
+                    const message = `Hello! Iam intrested to buy the item ${product.title}from Gbuddy store.`;
+                    const encodedMessage = encodeURIComponent(message);
+                    window.open(
+                      `whatsapp://send?phone=${mobile}&text=${encodedMessage}`,
+                      "_blank"
+                    );
+                  }}
+                >
                   CHAT NOW
                 </button>
               </div>
