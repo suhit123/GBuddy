@@ -7,9 +7,11 @@ import SignInSide from './pages/Signup';
 import ResourceOptions from './pages/Resources/resourcesOptions';
 import Library from './pages/Resources/Library';
 import AddProduct from './pages/products/AddProduct';
+import Chatbot from './pages/components/chatbot';
 
 function App() {
   return (
+    <div>
     <CartProvider>
       <BrowserRouter>
         <Routes>
@@ -21,8 +23,11 @@ function App() {
           <Route path="/library" element={<Library/>}/>
           <Route path="/addProduct" element={<AddProduct/>}/>
         </Routes>
+        <Chatbot/>
+        
       </BrowserRouter>
       </CartProvider>
+      </div>
   );
 }
 
