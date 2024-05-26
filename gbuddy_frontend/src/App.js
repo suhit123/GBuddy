@@ -8,7 +8,6 @@ import ResourceOptions from './pages/Resources/resourcesOptions';
 import Library from './pages/Resources/Library';
 import AddProduct from './pages/products/AddProduct';
 import Chatbot from './pages/components/chatbot';
-import HomePage from './pages/homePage';
 import ProfilePage from './pages/profilePage';
 import ResourceContribute from './pages/Resources/ResourceContribute';
 
@@ -22,7 +21,6 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/signup" element={<SignInSide/>} />
-          <Route path="/home" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/resourceOptions" element={<ResourceOptions/>} />
           <Route path="/library" element={<Library/>}/>

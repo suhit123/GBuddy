@@ -7,9 +7,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import NavBar from "./components/navbar";
 import "../css/wallet.css";
 import background from "../images/background1.jpg";
+import { Nav } from "react-bootstrap";
 
 const ProfilePage = () => {
     const token = localStorage.getItem('token');
@@ -73,7 +73,7 @@ const ProfilePage = () => {
 
     return (
         <>
-        <NavBar />
+        <Nav/>
         <div style={{height:"50px"}}></div>
         <Box mt={4} px={3} sx={{backgroundImage:`url(${background})`}}>
             <Grid container spacing={4} justifyContent="center">
