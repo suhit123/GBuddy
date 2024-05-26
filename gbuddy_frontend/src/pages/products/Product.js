@@ -4,6 +4,7 @@ import "../../css/products/product.css";
 import axios from "axios";
 import Nav from "../../components/Nav";
 import { CartContext } from "../../context/cartContext";
+import Loader from "../../components/Loader";
 const Product = () => {
   const { id } = useParams();
   const { cart, fetchCart } = useContext(CartContext);
@@ -42,11 +43,13 @@ const Product = () => {
     };
   }, [id]);
   const addToCart = async (id) => {
+    const token=localStorage.getItem('token');
+    console.log(token);
+    if(token && token.length!==0){
     setAddToCartLoader(true);
     await axios
       .post("http://localhost:8080/products/addToCart", {
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90",
+        token,
         productId: id,
       })
       .then((response) => {
@@ -59,6 +62,7 @@ const Product = () => {
         setAddToCartLoader(false);
       }
       );
+    }
   };
 
   //payment
@@ -120,9 +124,7 @@ const Product = () => {
     <>
       <Nav />
       <div>
-        {dataLoading ? <div className="productsPageLoader">
-          <img style={{ width: "400px", height: "auto" }} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
-        </div> :
+        {dataLoading ? <Loader/> :
           <div className="productDetailedEntireContainer">
             <div className="productDetailedContainer">
               <div className="productDetailedContainerLeft">

@@ -4,9 +4,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/cartContext";
 import Loader from "./Loader";
-const Nav = ({counter=0}) => {
+const Nav = ({ counter = 0 }) => {
   const navigator = useNavigate();
-  const {cart,fetchCart,cartLoading}=useContext(CartContext);
+  const { cart, fetchCart, cartLoading } = useContext(CartContext);
   const [user, setUser] = useState("fc");
   const [openCart, setOpenCart] = useState(false);
 
@@ -15,7 +15,7 @@ const Nav = ({counter=0}) => {
   const [removeLoader, setRemoveLoader] = useState(false);
 
   useEffect(() => {
-    const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90";
     if (token) {
       fetchCart();
     }
@@ -24,7 +24,7 @@ const Nav = ({counter=0}) => {
     setRemoveLoader(true);
     await axios
       .post("http://localhost:8080/products/removeFromCart", {
-        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90",
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTI1ZWEwYzJmZTZiNmIxZjdhMjcxMiIsImlhdCI6MTcxNjY3NDI2NH0.1IIZd7Sy0W9pGlqS82EiGqb3R9YzFoqxOabrliiDo90",
         productId: id,
       })
       .then((response) => {
@@ -37,13 +37,13 @@ const Nav = ({counter=0}) => {
       .finally(() => {
         setRemoveLoader(false);
       });
-    };
+  };
   return (
     <>
       <div className="navContainer">
         <div className="navLeft">
           <button className="navLeftButton">Resources</button>
-          <button className="navLeftButton" onClick={()=>navigator('/products')}>Products</button>
+          <button className="navLeftButton" onClick={() => navigator('/products')}>Products</button>
           <button className="navLeftButton">Roadmaps</button>
         </div>
         <div className="navMiddle">
@@ -71,11 +71,11 @@ const Nav = ({counter=0}) => {
         <div className="closeBtnCart" onClick={() => setOpenCart(!openCart)}>
           <p>Close</p>
         </div>
-        <div className="cartItemsContainer"> 
+        <div className="cartItemsContainer">
           <h1>Cart Items</h1>
-          {cartLoading? <div className="productsPageLoader">
-                    <img style={{width:"300px",height:"auto"}} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
-        </div>:cart.map((item) => {
+          {cartLoading ? <div className="productsPageLoader">
+            <img style={{ width: "300px", height: "auto" }} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
+          </div> : cart.map((item) => {
             return (
               <div className="cartProductShow">
                 <div className="cartProductShowLeft">
@@ -86,9 +86,9 @@ const Nav = ({counter=0}) => {
                   <p>{item.description.slice(0, 50)}...</p>
                   <p>Price : {item.price}</p>
                   <div className="removeViewButtons">
-                    <button onClick={()=>{
+                    <button onClick={() => {
                       removeHandler(item._id);
-                    }}>{removeLoader?"Loading...":"Remove"}</button>
+                    }}>{removeLoader ? "Loading..." : "Remove"}</button>
                     <button
                       onClick={() => {
                         navigator(`/product/${item._id}`);
