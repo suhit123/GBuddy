@@ -4,9 +4,11 @@ import Product from './pages/products/Product';
 import Products from './pages/products/Products';
 import { CartProvider } from './context/cartContext';
 import SignInSide from './pages/Signup';
+import Chatbot from './pages/components/chatbot';
 
 function App() {
   return (
+    <div>
     <CartProvider>
       <BrowserRouter>
         <Routes>
@@ -15,8 +17,11 @@ function App() {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/signup" element={<SignInSide/>} />
         </Routes>
+        <Chatbot/>
+        
       </BrowserRouter>
       </CartProvider>
+      </div>
   );
 }
 
