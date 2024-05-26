@@ -35,7 +35,7 @@ export default function SignInSide() {
   const [warnPass, setWarnPass] = React.useState(false);
   const [otp, setOtp] = React.useState("");
   const [otpVerified, setOtpVerified] = React.useState(false);
-  const [GenOTP , setGenOTP] = React.useState(0);
+  const [GenOTP, setGenOTP] = React.useState("");
 
   const handleChange = (e) => {
     setInputs({
@@ -44,8 +44,7 @@ export default function SignInSide() {
     });
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (currentStep === STEP.SIGN_IN) {
@@ -83,7 +82,22 @@ export default function SignInSide() {
           progress: undefined,
         });
       } else {
-        // Handle Sign In Logic Here
+        try {
+          const res = await axios.post('http://localhost:4001/user/login', { email: inputs.email, password: inputs.password });
+          console.log("Login Success", res.data);
+          window.location.href = "/home";
+        } catch (error) {
+          console.error("Login Failed", error.message);
+          toast.error("Invalid Email or Password", {
+            position: "top-right",
+            autoClose: 3500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
       }
     } else if (currentStep === STEP.SIGN_UP) {
       if (inputs.email === "") {
@@ -144,25 +158,23 @@ export default function SignInSide() {
       } else {
         const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
         console.log("OTP Generated Successfully", generatedOTP);
-        console.log("Sending OTP.....");
         setGenOTP(generatedOTP);
-        axios.post('http://localhost:4001/user/sendOtp', { email: inputs.email, otp: GenOTP, username: inputs.name })
-          .then((res) => {
-            console.log("OTP Sent to DB", res.data);
-            setCurrentStep(STEP.OTP_VERIFICATION); // Move to OTP verification step
-          })
-          .catch((error) => {
-            console.error("Error in sending OTP", error.message);
-            toast.error("Invalid Email", {
-              position: "top-right",
-              autoClose: 3500,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+        try {
+          const res = await axios.post('http://localhost:4001/user/sendOtp', { email: inputs.email, otp: generatedOTP, username: inputs.name });
+          console.log("OTP Sent to DB", res.data);
+          setCurrentStep(STEP.OTP_VERIFICATION); // Move to OTP verification step
+        } catch (error) {
+          console.error("Error in sending OTP", error.message);
+          toast.error("Invalid Email", {
+            position: "top-right",
+            autoClose: 3500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
           });
+        }
       }
     } else if (currentStep === STEP.OTP_VERIFICATION) {
       console.log(GenOTP + " === " + otp + " ? ");
@@ -177,6 +189,13 @@ export default function SignInSide() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
+        });
+        axios.post('http://localhost:4001/user/post', { email: inputs.email, password: inputs.password, username: inputs.name })
+        .then((res) => {
+          console.log("User Created Successfully", res.data);
+        })
+        .catch((error) => {
+          console.error("Error in creating User", error.message);
         });
         window.location.href = "/home";
       } else {
