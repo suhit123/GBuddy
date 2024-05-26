@@ -142,8 +142,6 @@ const Product = () => {
       handler: function (response) {
         // // Validate payment at server - using webhooks is a better idea. // alert(response.razorpay_payment_id);  // alert(response.razorpay_order_id);  // alert(response.razorpay_signature);
         if (response.razorpay_payment_id) {
-          //   addToOrders();
-          //   reduceQty();
           const handleBuyer = async () => {
             await axios
               .post("http://localhost:8080/products/updateBuyerId", {
@@ -155,7 +153,22 @@ const Product = () => {
                 console.log(err);
               });
           };
+          const balanceUpdater = async () => {
+            await axios
+              .post("http://localhost:8080/user/addAmount", {
+                id: product.sellerId,
+                amount: intialAmount,
+                commission: commission,
+              })
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
           handleBuyer();
+          balanceUpdater();
           window.location.reload();
           fetcher();
         } else {

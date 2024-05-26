@@ -2,12 +2,12 @@ const userSchema = require('../../models/user/userSchema');
 exports.addAmount = async (req, res) => {
     try {
         const { userId, amount ,commision} = req.body;
-        const user = await userSchema.findById(userId,amount);
-        user.amount += amount;
+        console.log(userId, amount);
+        const user = await userSchema.findById(userId);
+        user.wallet += amount;
         await user.save();
-
         const admin = await userSchema.findOne({role: "admin"});
-        admin.amount += commision;
+        admin.wallet += commision;
         await admin.save();
         res.status(200).json({
             message: "Amount added successfully",
