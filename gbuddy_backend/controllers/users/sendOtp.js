@@ -14,7 +14,7 @@ const sendOtp = async (req , res) => {
         var mailOptions = {
         from: "mgowthamraj9491@gmail.com",
         to: req.body.email,
-        subject: `Welcome to GITAM - BUDDY APP`,
+        subject: `Welcome to GHELPER`,
         text: `Hello ${req.body.username} \n Your OTP is ${req.body.otp}`
         };
 
