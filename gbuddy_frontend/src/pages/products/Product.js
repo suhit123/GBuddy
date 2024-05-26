@@ -4,6 +4,7 @@ import "../../css/products/product.css";
 import axios from "axios";
 import Nav from "../../components/Nav";
 import { CartContext } from "../../context/cartContext";
+import Loader from "../../components/Loader";
 const Product = () => {
   const { id } = useParams();
   const { cart, fetchCart } = useContext(CartContext);
@@ -120,9 +121,7 @@ const Product = () => {
     <>
       <Nav />
       <div>
-        {dataLoading ? <div className="productsPageLoader">
-          <img style={{ width: "400px", height: "auto" }} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
-        </div> :
+        {dataLoading ? <Loader/> :
           <div className="productDetailedEntireContainer">
             <div className="productDetailedContainer">
               <div className="productDetailedContainerLeft">

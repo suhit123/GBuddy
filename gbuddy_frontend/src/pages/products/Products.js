@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import '../../css/products/products.css';
 import { useNavigate } from "react-router-dom";
 import Nav from "../../components/Nav";
+import Loader from "../../components/Loader";
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
@@ -49,9 +50,7 @@ const Products = () => {
                     <input className="searchProducts" type="text" placeholder="Search Products" onChange={searchHandler} />
                 </div>
                 {loading?
-                <div className="productsPageLoader">
-                    <img style={{width:"400px",height:"auto"}} src="https://cdn.dribbble.com/users/133424/screenshots/3708293/animacia3.gif" alt="loading" />
-                </div>:<div className="productsList">
+               <Loader/>:<div className="productsList">
                     {products.map((product) => {
                         return (
                             <div className="productsListItem" key={product._id}>
