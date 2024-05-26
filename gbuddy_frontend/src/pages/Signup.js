@@ -13,6 +13,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logo from "../images/logo.png";
+import design from "../images/pngegg.png";
+import background from "../images/background.jpg";
+import Chatbot from './components/chatbot';
 
 const defaultTheme = createTheme();
 
@@ -234,20 +238,19 @@ export default function SignInSide() {
     return (
         <ThemeProvider theme={defaultTheme}>
             <ToastContainer />
-            <Grid container component="main" className="min-vh-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: "#90EE90" }}>
+            <Grid container component="main" className="min-vh-100 d-flex justify-content-center align-items-center" style={{ backgroundImage : `url(${background})` , backgroundRepeat: "no-repeat" , backgroundSize : "cover"}}> 
                 <CssBaseline />
                 <Grid item xs={12} sm={8} md={8} container className="shadow-lg rounded" style={{ height: '80vh', width: '70vw', backgroundColor: '#fff' }}>
-                    <Grid item xs={12} sm={4} md={6} className="d-flex flex-column align-items-center justify-content-center text-white p-4 rounded-left" style={{ backgroundColor: '#38A3A5' }}>
-                        <Avatar className="bg-secondary mb-3" sx={{ height: "200px", width: "300px" }}>
+                    <Grid item xs={10} sm={4} md={6} component={Paper} elevation={6} className="d-flex flex-column align-items-center justify-content-center text-white p-4 rounded-left" style={{ backgroundColor: '#1A9F5F' }}>
+                        <img src={design} alt="logo" style={{ width: '50%', height: '40%' }} />
 
-                        </Avatar>
                         <Typography component="h1" variant="h3" className="fw-bold mb-3">
                             GITAM - BUDDY
                         </Typography>
                         <Avatar className="bg-secondary mb-3">
                             <LockOutlinedIcon />
                         </Avatar>
-                        <Typography variant="h5" className="mb-3">
+                        <Typography variant="h5" className="mb-3" sx={{color:"#45F19E"}}>
                             {currentStep === STEP.SIGN_UP ? "Create Account" : "Welcome Back!"}
                         </Typography>
                         <Typography variant="body1" className="mb-3">
@@ -268,7 +271,7 @@ export default function SignInSide() {
                             <Avatar className="bg-secondary mb-4">
                                 <LockOutlinedIcon />
                             </Avatar>
-                            <Typography component="h1" variant="strong" sx={{ color: "#90EE90" }}>
+                            <Typography component="h1" variant="strong" sx={{ color: "#45F19E" }}>
                                 {currentStep === STEP.SIGN_UP ? "Create Account" : "Sign In"}
                             </Typography>
                             <Box component="form" noValidate onSubmit={handleSubmit} className="w-100 mt-3">
@@ -387,7 +390,7 @@ export default function SignInSide() {
                                     type='submit'
                                 >
                                     <a
-                                        className="btn btn-outline-light border-1 py-3 px-5 animated slideInRight" style={{ backgroundColor: "#38A3A5" }}
+                                        className="btn btn-outline-light border-1 py-3 px-5 animated slideInRight" style={{ backgroundColor: "#45F19E" }}
                                     >
                                         {currentStep === STEP.SIGN_IN ? "Sign In" : currentStep === STEP.SIGN_UP ? "Sign Up" : "Verify OTP"}
                                     </a>
@@ -398,6 +401,7 @@ export default function SignInSide() {
                     </Grid>
                 </Grid>
             </Grid>
+        <Chatbot/>
         </ThemeProvider>
     );
 }
